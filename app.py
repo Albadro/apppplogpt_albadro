@@ -30,10 +30,9 @@ app = Flask(__name__)
 
 # Connect to Redis
 
-redis_host = os.environ.get("REDIS_HOST")  # Get from environment variables
-redis_port = int(os.environ.get("REDIS_PORT"))
 
-redis_client = redis.Redis(host=redis_host, port=redis_port) 
+
+redis_client = redis.Redis(host='red-cpdlf9vsc6pc7393odk0', port=6379) 
 
 @app.route("/")
 def index():
