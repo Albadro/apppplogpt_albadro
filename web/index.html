@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPLO Chat</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif; /* Using Roboto font */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #222; /* Dark Mode Background */
+            color: #eee; /* Dark Mode Text */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin: 0; /* Remove default body margins */
+            overflow: hidden; /* Hide scrollbars */
+        }
+
+        .chat-container {
+            width: 95%; /* Adjust width as needed */
+            max-width: 800px; /* Limit max width */
+            height: 80vh; /* Adjust height as needed */
+            display: flex;
+            flex-direction: column;
+            background-color: #333; /* Dark Mode Container */
+            border-radius: 10px; /* Add rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+            padding: 20px;
+            transition: background-color 0.3s ease;
+            position: relative;
+            margin: 20px auto; /* Center the container */
+        }
+
+        .chat-messages {
+            flex-grow: 1; /* Allow chat messages to take up the remaining space */
+            overflow-y: auto; /* Vertical scrollbar only */
+            padding: 10px;
+            border: none; /* Remove border */
+            border-radius: 0; /* Remove rounded corners */
+            transition: border-color 0.3s ease;
+            position: relative; /* To position the typing animation */
+            overflow-x: hidden; /* Hide horizontal scrollbar */
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 15px 20px; /* Add more padding */
+            border-radius: 10px; /* More rounded corners */
+            animation: messageAnimation 0.5s ease-in-out;
+            margin-left: 50%;
+        }
+
+        .user-message {
+            background-color: #444; /* Dark Mode User Message */
+            text-align: right; /* Align to the right */
+            color: #ffffff; /* User message color */
+            padding-right: 20px; /* Add right padding */
+            margin-right: 10%; /* 10% margin to the right */
+            transition: background-color 0.3s ease;
+            border-top-left-radius: 0; /* Remove top-left corner */
+            border-bottom-left-radius: 10px; /* Rounded bottom-left corner */
+        }
+
+        .user-message:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            background-color: #444;
+            border-radius: 50%;
+        }
+
+        .assistant-message {
+            background-color: #333; /* Dark Mode Assistant Message */
+            text-align: left; /* Align to the left */
+            color: #eee; /* Bot message color */
+            padding-left: 20px; /* Add left padding */
+            margin-left: 1%; /* 10% margin to the left */
+            transition: background-color 0.3s ease;
+            border-top-right-radius: 0; /* Remove top-right corner */
+            border-bottom-right-radius: 10px; /* Rounded bottom-right corner */
+        }
+
+        .assistant-message:before {
+            padding-right: 20%;
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            background-color: #333;
+            border-radius: 50%;
+        }
+
+        .chat-input {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-top: 1px solid #444; /* Dark Mode Input Border */
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #444; /* Dark Mode Input Border */
+            border-radius: 5px;
+            margin-right: 10px;
+            transition: border-color 0.3s ease;
+            font-weight: bold; /* Make input text bold */
+            background-color: #444; /* Darker background for input */
+            color: #eee; /* White text for input */
+        }
+
+        .chat-input button {
+            padding: 10px 15px;
+            background-color: #009688; /* Dark Mode Button */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: bold; /* Make button text bold */
+        }
+
+        /* Animations */
+        @keyframes messageAnimation {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Futuristic Design - Removed as it makes the design less comfortable */
+
+        /* Code block styling with black background */
+        .message pre {
+            background-color: #000; /* Black background for code blocks */
+            padding: 10px;
+            margin: 0;
+            overflow-x: auto; /* Allow horizontal scrolling for code blocks */
+            border-radius: 5px;
+        }
+
+        .message pre code {
+            font-family: monospace;
+            white-space: pre;
+            display: block;
+            padding: 0;
+            margin: 0;
+            color: #eee; /* White text for code */
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be displayed here -->
+        </div>
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Ask me anything! ...">
+            <button id="sendButton">Send</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.7/marked.min.js"></script> 
+
+    <script>
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+        let userId = Math.random().toString(36).substring(2, 15); // Generate a unique ID
+
+        // Function to display a message in the chat window
+        function displayMessage(role, message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', `${role}-message`);
+
+            // Parse Markdown with marked.js
+            const parsedHtml = marked(message); 
+            
+            // Create a new element to hold the parsed HTML
+            const markdownElement = document.createElement('div');
+            markdownElement.innerHTML = parsedHtml; // Insert parsed HTML
+
+            // Append the parsed HTML to the message element
+            messageElement.appendChild(markdownElement);
+
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
+        }
+
+        // Event listener for sending messages
+        sendButton.addEventListener('click', () => {
+            sendMessage();
+        });
+
+        userInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const message = userInput.value;
+            if (message.trim() !== "") {
+                displayMessage("user", message);
+                userInput.value = "";
+
+                // Send the message to the server
+                fetch('/api/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: message,
+                        userId: userId 
+                    })
+                })
+                .then(response => response.text()) // Get the full response text
+                .then(text => {
+                    displayMessage("assistant", text);
+                })
+                .catch(error => {
+                    console.error('Error sending message:', error);
+                });
+            }
+        }
+
+        // Example: Initial greeting message
+        fetch('/api/generate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                contents: 'Hello!',
+                userId: userId
+            })
+        })
+        .then(response => response.text())
+        .then(data => {
+            displayMessage("assistant", data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    </script>
+</body>
+</html>
