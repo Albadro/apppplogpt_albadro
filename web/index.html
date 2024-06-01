@@ -8,61 +8,60 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            font-family: 'Roboto', sans-serif; /* Using Roboto font */
+            font-family: 'Roboto', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            background-color: #222; /* Dark Mode Background */
-            color: #eee; /* Dark Mode Text */
+            background-color: #222;
+            color: #eee;
             transition: background-color 0.3s ease, color 0.3s ease;
-            margin: 0; /* Remove default body margins */
-            overflow: hidden; /* Hide scrollbars */
+            margin: 0;
+            overflow: hidden;
         }
 
         .chat-container {
-            width: 95%; /* Adjust width as needed */
-            max-width: 800px; /* Limit max width */
-            height: 80vh; /* Adjust height as needed */
+            width: 95%;
+            max-width: 800px;
+            height: 80vh;
             display: flex;
             flex-direction: column;
-            background-color: #333; /* Dark Mode Container */
-            border-radius: 10px; /* Add rounded corners */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+            background-color: #333;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             padding: 20px;
             transition: background-color 0.3s ease;
             position: relative;
-            margin: 20px auto; /* Center the container */
+            margin: 20px auto;
         }
 
         .chat-messages {
-            flex-grow: 1; /* Allow chat messages to take up the remaining space */
-            overflow-y: auto; /* Vertical scrollbar only */
+            flex-grow: 1;
+            overflow-y: auto;
             padding: 10px;
-            border: none; /* Remove border */
-            border-radius: 0; /* Remove rounded corners */
+            border: none;
+            border-radius: 0;
             transition: border-color 0.3s ease;
-            position: relative; /* To position the typing animation */
-            overflow-x: hidden; /* Hide horizontal scrollbar */
+            position: relative;
+            overflow-x: hidden;
         }
 
         .message {
             margin-bottom: 10px;
-            padding: 15px 20px; /* Add more padding */
-            border-radius: 10px; /* More rounded corners */
+            padding: 15px 20px;
+            border-radius: 10px;
             animation: messageAnimation 0.5s ease-in-out;
-            margin-left: 50%;
         }
 
         .user-message {
-            background-color: #444; /* Dark Mode User Message */
-            text-align: right; /* Align to the right */
-            color: #ffffff; /* User message color */
-            padding-right: 20px; /* Add right padding */
-            margin-right: 10%; /* 10% margin to the right */
+            background-color: #444;
+            text-align: right;
+            color: #ffffff;
+            padding-right: 20px;
+            margin-right: 10%;
             transition: background-color 0.3s ease;
-            border-top-left-radius: 0; /* Remove top-left corner */
-            border-bottom-left-radius: 10px; /* Rounded bottom-left corner */
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 10px;
         }
 
         .user-message:before {
@@ -78,14 +77,14 @@
         }
 
         .assistant-message {
-            background-color: #333; /* Dark Mode Assistant Message */
-            text-align: left; /* Align to the left */
-            color: #eee; /* Bot message color */
-            padding-left: 20px; /* Add left padding */
-            margin-left: 1%; /* 10% margin to the left */
+            background-color: #333;
+            text-align: left;
+            color: #eee;
+            padding-left: 20px;
+            margin-left: 1%;
             transition: background-color 0.3s ease;
-            border-top-right-radius: 0; /* Remove top-right corner */
-            border-bottom-right-radius: 10px; /* Rounded bottom-right corner */
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 10px;
         }
 
         .assistant-message:before {
@@ -105,31 +104,31 @@
             display: flex;
             align-items: center;
             padding: 10px;
-            border-top: 1px solid #444; /* Dark Mode Input Border */
+            border-top: 1px solid #444;
             transition: border-color 0.3s ease;
         }
 
         .chat-input input {
             flex-grow: 1;
             padding: 10px;
-            border: 1px solid #444; /* Dark Mode Input Border */
+            border: 1px solid #444;
             border-radius: 5px;
             margin-right: 10px;
             transition: border-color 0.3s ease;
-            font-weight: bold; /* Make input text bold */
-            background-color: #444; /* Darker background for input */
-            color: #eee; /* White text for input */
+            font-weight: bold;
+            background-color: #444;
+            color: #eee;
         }
 
         .chat-input button {
             padding: 10px 15px;
-            background-color: #009688; /* Dark Mode Button */
+            background-color: #009688;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            font-weight: bold; /* Make button text bold */
+            font-weight: bold;
         }
 
         /* Animations */
@@ -144,14 +143,12 @@
             }
         }
 
-        /* Futuristic Design - Removed as it makes the design less comfortable */
-
         /* Code block styling with black background */
         .message pre {
-            background-color: #000; /* Black background for code blocks */
+            background-color: #000; 
             padding: 10px;
             margin: 0;
-            overflow-x: auto; /* Allow horizontal scrolling for code blocks */
+            overflow-x: auto;
             border-radius: 5px;
         }
 
@@ -161,7 +158,23 @@
             display: block;
             padding: 0;
             margin: 0;
-            color: #eee; /* White text for code */
+            color: #eee;
+        }
+
+        /* Responsive Design (for mobile and smaller screens) */
+        @media screen and (max-width: 600px) {
+            .chat-container {
+                width: 98%;
+                height: 85vh; /* Adjust height as needed for mobile */
+            }
+
+            .user-message {
+                margin-right: 2%; /* Smaller margin for mobile */
+            }
+
+            .assistant-message {
+                margin-left: 2%; /* Smaller margin for mobile */
+            }
         }
     </style>
 </head>
