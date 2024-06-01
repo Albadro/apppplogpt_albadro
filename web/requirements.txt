@@ -1,0 +1,3 @@
+google-generativeai # Client library for the Gemini API
+flask
+redis
