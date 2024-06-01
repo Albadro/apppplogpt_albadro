@@ -58,7 +58,7 @@
             text-align: right;
             color: #ffffff;
             padding-right: 20px;
-            margin-right: 10%;
+            margin-left: 40%;
             transition: background-color 0.3s ease;
             border-top-left-radius: 0;
             border-bottom-left-radius: 10px;
@@ -85,6 +85,7 @@
             transition: background-color 0.3s ease;
             border-top-right-radius: 0;
             border-bottom-right-radius: 10px;
+            position: relative; /* To position the cursor */
         }
 
         .assistant-message:before {
@@ -180,12 +181,12 @@
         /* Header and Footer Styles */
         header {
             background-color: #111;
-            padding: 8px;
+            padding: 10px;
             text-align: center;
             width: 100%;
             position: fixed;
             top: 0;
-            z-index: 1; /* Ensure header stays on top */
+            z-index: 1; 
         }
 
         footer {
@@ -195,7 +196,7 @@
             width: 100%;
             position: fixed;
             bottom: 0;
-            z-index: 1; /* Ensure footer stays on top */
+            z-index: 1;
         }
 
         .header-title {
@@ -210,12 +211,29 @@
         }
 
         .footer-content a {
-            color: #009688; /* Link color */
+            color: #009688;
             text-decoration: none;
         }
 
         .footer-content a:hover {
             text-decoration: underline;
+        }
+
+        /* Typing Animation */
+        .typing-cursor {
+            position: absolute;
+            right: 10px;
+            bottom: 5px;
+            width: 4px;
+            height: 18px;
+            background-color: #eee;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -265,6 +283,25 @@
 
             chatMessages.appendChild(messageElement);
             chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
+
+            // Add typing animation for assistant responses
+            if (role === "assistant") {
+                const typingCursor = document.createElement('div');
+                typingCursor.classList.add('typing-cursor');
+                messageElement.appendChild(typingCursor);
+
+                // Type the message letter by letter (or word by word, adjust as needed)
+                let i = 0;
+                const typeInterval = setInterval(() => {
+                    if (i < message.length) {
+                        markdownElement.textContent = message.substring(0, i + 1); // Adjust for word by word
+                        i++;
+                    } else {
+                        clearInterval(typeInterval);
+                        messageElement.removeChild(typingCursor); // Remove the cursor
+                    }
+                }, 50); // Adjust the speed here (milliseconds)
+            }
         }
 
         // Event listener for sending messages
