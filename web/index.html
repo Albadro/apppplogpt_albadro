@@ -165,20 +165,65 @@
         @media screen and (max-width: 600px) {
             .chat-container {
                 width: 98%;
-                height: 85vh; /* Adjust height as needed for mobile */
+                height: 85vh;
             }
 
             .user-message {
-                margin-right: 2%; /* Smaller margin for mobile */
+                margin-right: 2%;
             }
 
             .assistant-message {
-                margin-left: 2%; /* Smaller margin for mobile */
+                margin-left: 2%;
             }
+        }
+
+        /* Header and Footer Styles */
+        header {
+            background-color: #111;
+            padding: 8px;
+            text-align: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 1; /* Ensure header stays on top */
+        }
+
+        footer {
+            background-color: #111;
+            padding: 10px;
+            text-align: center;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            z-index: 1; /* Ensure footer stays on top */
+        }
+
+        .header-title {
+            color: #eee;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+
+        .footer-content {
+            color: #eee;
+            font-size: 0.8em;
+        }
+
+        .footer-content a {
+            color: #009688; /* Link color */
+            text-decoration: none;
+        }
+
+        .footer-content a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
+    <header>
+        <h1 class="header-title">pploGPT 4.1</h1>
+    </header>
+
     <div class="chat-container">
         <div class="chat-messages" id="chatMessages">
             <!-- Messages will be displayed here -->
@@ -188,6 +233,12 @@
             <button id="sendButton">Send</button>
         </div>
     </div>
+
+    <footer>
+        <div class="footer-content">
+            © 2022-2024 Youssef pplo (<a href="https://pplo.dev">https://pplo.dev</a>)
+        </div>
+    </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.7/marked.min.js"></script> 
 
