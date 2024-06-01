@@ -29,7 +29,11 @@ genai.configure(api_key=API_KEY)
 app = Flask(__name__)
 
 # Connect to Redis
-redis_client = redis.Redis(host='127.0.0.1', port=6379)  
+
+redis_host = os.environ.get("REDIS_HOST")  # Get from environment variables
+redis_port = int(os.environ.get("REDIS_PORT"))
+
+redis_client = redis.Redis(host=redis_host, port=redis_port) 
 
 @app.route("/")
 def index():
